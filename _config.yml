@@ -1,8 +1,8 @@
 title: Alpay's Tech Blog
 description: A blog about Swift, iOS Development, and more
 author: Alpay Calalli
-url: # Add your site URL here
-baseurl: ""
+url: "https://alpaycli.github.io"
+baseurl: "/alpaycli-blog"
 
 # Build settings
 markdown: kramdown

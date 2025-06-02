@@ -5,36 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
     {% seo %}
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
-        
-        {% if site.description %}
-        <p>{{ site.description }}</p>
-        {% endif %}
-
-        {% if site.github.is_project_page %}
-        <p class="view"><a href="{{ site.github.repository_url }}">View on GitHub</a></p>
-        {% endif %}
-
-        <nav class="main-nav">
-          <a href="{{ '/about/' | relative_url }}">About</a>
-          <a href="{{ '/blog/' | relative_url }}">Blog</a>
-        </nav>
-      </header>
-      <section>
+    {% include header.html %}
+    
+    <main class="page-content">
+      <div class="wrapper">
         {{ content }}
-      </section>
-      <footer>
-        {% if site.github_username %}
-        <p><a href="https://github.com/{{ site.github_username }}">View My GitHub Profile</a></p>
+        
+        {% if page.url == "/" %}
+        <div class="posts-list">
+          <h2>Latest Posts</h2>
+          <ul>
+            {% for post in site.posts limit:5 %}
+            <li>
+              <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+              <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+              {% if post.description %}
+              <p>{{ post.description }}</p>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          <a href="{{ site.baseurl }}/blog" class="all-posts-link">View All Posts</a>
+        </div>
         {% endif %}
-      </footer>
-    </div>
-    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrapper">
+        <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved.</p>
+      </div>
+    </footer>
   </body>
 </html> 

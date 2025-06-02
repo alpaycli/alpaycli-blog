@@ -1,0 +1,135 @@
+// Header styles
+.site-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+
+  .header-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .site-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    
+    &:hover {
+      color: #0366d6;
+    }
+  }
+
+  .site-nav {
+    a {
+      margin-left: 1.5rem;
+      color: #666;
+      text-decoration: none;
+      
+      &:hover {
+        color: #0366d6;
+      }
+    }
+  }
+}
+
+// Main content styles
+.page-content {
+  min-height: calc(100vh - 180px);
+  
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+}
+
+// Posts list styles
+.posts-list {
+  margin-top: 3rem;
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  h3 {
+    margin: 0 0 0.5rem;
+    
+    a {
+      color: #0366d6;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .post-date {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  p {
+    margin: 0.5rem 0 0;
+    color: #444;
+  }
+}
+
+.all-posts-link {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  color: #0366d6;
+  text-decoration: none;
+  border: 1px solid #0366d6;
+  border-radius: 4px;
+  
+  &:hover {
+    background-color: #0366d6;
+    color: white;
+  }
+}
+
+// Footer styles
+.site-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  
+  .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+  
+  p {
+    margin: 0;
+    color: #666;
+  }
+} 
