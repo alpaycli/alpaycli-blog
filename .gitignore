@@ -36,3 +36,26 @@
 ehthumbs.db
 Thumbs.db
 
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+
+# Ruby
+*.gem
+Gemfile.lock
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+

@@ -1,0 +1,36 @@
+title: Alpay's Tech Blog
+description: A blog about Swift, iOS Development, and more
+author: Alpay Calalli
+url: # Add your site URL here
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Social links
+github_username: alpaycalalli
+# twitter_username: your-twitter-handle
+# linkedin_username: your-linkedin-handle
+
+# Defaults for posts
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Alpay Calalli"
+      
+# Collections
+collections:
+  - swift
+  - ios
+
+# Sass/SCSS
+sass:
+  sass_dir: _sass
+  style: compressed
