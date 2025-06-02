@@ -4,6 +4,7 @@ title: "Welcome to My iOS Development Blog"
 date: 2024-03-24 12:00:00 -0000
 categories: [introduction, swift]
 tags: [swift, ios, welcome]
+permalink: /blog/:year/:month/:day/:title
 ---
 
 Welcome to my blog! I'm excited to start sharing my knowledge and experiences in iOS development and Swift programming. This blog will be a place where I document my journey, share insights, and hopefully help other developers along the way.
