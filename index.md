@@ -13,11 +13,3 @@ Welcome to my technical blog focused on iOS development, Swift programming, and 
 * Tips and tricks for better app development
 * Personal experiences and lessons learned
 * Code snippets and examples
-
-## Latest Posts
-
-{% for post in site.posts limit:5 %}
-* [{{ post.title }}]({{ post.url | relative_url }}) - {{ post.date | date: "%B %d, %Y" }}
-{% endfor %}
-
-| [View all posts]({{ '/blog' | relative_url }}) | [About me]({{ '/about' | relative_url }}) |
