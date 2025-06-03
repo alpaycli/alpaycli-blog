@@ -81,12 +81,18 @@ header, section, footer {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     font-weight: 700;
+    color: $text-color;
   }
 
   h2 {
     font-size: 2rem;
     margin: 2rem 0 1rem;
     font-weight: 600;
+    color: $text-color;
+  }
+
+  p {
+    color: $text-color;
   }
 }
 
