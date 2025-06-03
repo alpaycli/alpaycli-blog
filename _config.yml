@@ -6,7 +6,7 @@ baseurl: "/alpaycli-blog"
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-minimal
+theme: minima
 permalink: /blog/:year/:month/:day/:title
 plugins:
   - jekyll-feed
