@@ -4,8 +4,6 @@ title: About
 permalink: /about/
 ---
 
-# About Me
-
 Hi! I'm Alpay Calalli, an iOS developer, wwdc 2024, 25 swift student challenge winner, focused on building great feeling apps.
 
 ## Contact
