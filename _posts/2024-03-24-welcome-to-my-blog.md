@@ -20,6 +20,19 @@ In the coming posts, I'll be covering various topics including:
 - Performance optimization techniques
 - And much more!
 
+Here's an example of a Swift code block:
+
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, world!")
+            .padding()
+    }
+}
+```
+
 ## Stay Tuned
 
 I'll be posting regularly about different aspects of iOS development. Whether you're a beginner or an experienced developer, I hope you'll find something valuable here.

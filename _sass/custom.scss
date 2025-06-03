@@ -6,7 +6,7 @@ $border-color: #404040;
 $header-background: #252525;
 $date-color: #888;
 $read-time-color: #666;
-$code-background: #2d2d2d;
+$code-background: #383838;
 $blockquote-border: #4a4a4a;
 
 // Reset some theme styles
@@ -75,7 +75,7 @@ header, section, footer {
 // Main content styles
 .page-content {
   min-height: calc(100vh - 200px);
-  padding: 8rem 0 0 0 !important;
+  padding: 2rem 0 0 0 !important;
   
   h1 {
     font-size: 2.5rem;
@@ -92,7 +92,7 @@ header, section, footer {
 
 // Posts list styles
 .posts-list {
-  margin: 4rem 0;
+  margin: 2rem 0;
   
   h2 {
     font-size: 2rem;
@@ -269,15 +269,127 @@ header, section, footer {
     }
 
     pre {
-      background: $code-background !important;
+      background: $background-color !important;
       padding: 1rem !important;
-      border-radius: 8px !important;
+      border-radius: 0px !important;
+      border: none !important;
       overflow-x: auto !important;
       margin: 1.5rem 0 !important;
+      position: relative;
+
+      .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: $header-background;
+        color: $text-color;
+        border: 1px solid $border-color;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        z-index: 10;
+      }
+
+      &:hover .copy-button {
+        opacity: 0.7;
+      }
+
+      .copy-button:hover {
+        opacity: 1;
+        background-color: lighten($header-background, 10%);
+        border-color: $link-color;
+      }
 
       code {
         background: none !important;
         padding: 0 !important;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+        font-size: 0.9em !important;
+        line-height: 1.5 !important;
+        color: $text-color !important;
+
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata,
+        .c, .c1, .cm, .cp, .cs {
+          color: #7F848E !important;
+          font-style: italic !important;
+        }
+
+        .token.punctuation,
+        .p, .pi, .po {
+          color: #ABB2BF !important;
+        }
+
+        .token.property,
+        .token.tag,
+        .token.boolean,
+        .token.number,
+        .token.constant,
+        .token.symbol,
+        .token.deleted,
+        .m, .mf, .mh, .mi, .mo, .il {
+          color: #D19A66 !important;
+        }
+
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.inserted,
+        .s, .s1, .s2, .sb, .sc, .sd, .se, .sh, .si, .sr, .ss, .sx {
+          color: #98C379 !important;
+        }
+
+        .token.operator,
+        .token.entity,
+        .token.url,
+        .language-css .token.string,
+        .style .token.string,
+        .o, .ow {
+          color: #56B6C2 !important;
+        }
+        
+        .token.keyword,
+        .k, .kd, .kc, .kn, .kp, .kr {
+          color: #C678DD !important;
+        }
+        
+        .token.atrule,
+        .token.attr-value,
+        .token.function,
+        .token.class-name,
+        .nf, .fm, .na {
+          color: #56B6C2 !important;
+        }
+
+        .token.regex,
+        .token.important,
+        .token.variable,
+        .nv, .vc, .vg, .vi, .vm {
+          color: #BE86E3 !important;
+        }
+
+        .token.important,
+        .token.bold {
+          font-weight: bold !important;
+        }
+        .token.italic {
+          font-style: italic !important;
+        }
+
+        .token.entity {
+          cursor: help;
+        }
+
+        .kt, .nc, .nn, .nb {
+          color: #61AFEF !important;
+        }
       }
     }
   }
