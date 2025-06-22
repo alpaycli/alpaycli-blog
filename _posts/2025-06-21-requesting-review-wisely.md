@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Requesting review wisely"
+title: "How I managed requsting reviews in Treaty"
 date: 2025-06-21 12:00:00 -0000
 categories: []
 tags: []
