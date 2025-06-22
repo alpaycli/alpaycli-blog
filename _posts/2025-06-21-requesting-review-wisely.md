@@ -11,6 +11,8 @@ Requesting reviews and gathering feedback from users is an important part of all
 
 <!-- Add image here -->
 
+<img src="{{ '/assets/images/requestreview-img.jpg' | relative_url }}" alt="Request Review Preview" style="width: 350px; max-width: 100%;">
+
 Apple allows you to show this alert to users only up to 3 times within a 365-day period, so it's important to use it wisely.
 
 I'll show how I managed requesting reviews in [Treaty - Dog Health](https://apps.apple.com/az/app/treaty-dog-health/id6743374042) by building a similar structure to [TipKit](https://developer.apple.com/documentation/tipkit/).
@@ -111,6 +113,9 @@ struct FeedView: View {
 }
 ```
 
--Here we need preview video-
+<video width="350" style="max-width: 100%; border-radius: 16px;" controls>
+  <source src="/assets/images/requestreview-preview.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 Thanks for reading!
