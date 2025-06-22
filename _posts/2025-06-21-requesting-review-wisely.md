@@ -2,8 +2,8 @@
 layout: post
 title: "Requesting review wisely"
 date: 2025-06-21 12:00:00 -0000
-categories: [swift, swiftui]
-tags: [swift, swiftui, scrollview]
+categories: []
+tags: []
 permalink: /blog/:year/:month/:day/:title
 ---
 
