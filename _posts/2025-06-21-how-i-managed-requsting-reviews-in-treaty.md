@@ -9,6 +9,8 @@ permalink: /blog/2025/06/21/how-i-managed-requsting-reviews-in-treaty
 
 Requesting reviews and gathering feedback from users is an important part of all apps. 
 
+<!-- Add image here -->
+
 <img src="{{ '/assets/images/requestreview-img.jpg' | relative_url }}" alt="Request Review Preview" style="width: 350px; max-width: 100%;">
 
 Apple allows you to show this alert to users only up to 3 times within a 365-day period, so it's important to use it wisely.
