@@ -8,6 +8,7 @@ baseurl: "/alpaycli-blog"
 markdown: kramdown
 theme: minima
 permalink: /blog/:year/:month/:day/:title
+future: true
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

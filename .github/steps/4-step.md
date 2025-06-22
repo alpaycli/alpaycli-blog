@@ -12,7 +12,7 @@ Jekyll uses specially named files and frontmatter to create blog posts. The file
 
 ```yaml
 ---
-title: "Welcome to my blog"
+title: ""
 date: 2025-05-15
 ---
 ```
