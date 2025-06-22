@@ -1,8 +1,8 @@
 title: Alpay Calalli
 description: A blog about Swift, iOS Development, and more
 author: Alpay Calalli
-url: "https://alpaycli.github.io"
-baseurl: "/alpaycli-blog"
+url: "https://alpayc.com"
+baseurl: ""
 
 # Build settings
 markdown: kramdown
