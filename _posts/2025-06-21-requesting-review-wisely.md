@@ -26,8 +26,7 @@ Don't show the alert more than once
 ---
 
 ```swift
-@Observable
-class RequestReviewManager {
+actor RequestReviewManager {
    private let userDefaults: UserDefaults
    private let lastRequestReviewKey = "lastRequestReviewDate"
    private let lastVersionPromptedKey = "lastVersionPromptedForReview"
@@ -70,8 +69,7 @@ enum RequestReviewReason: String {
 ```swift
 import StoreKit
 
-@Observable
-class RequestReviewManager {
+actor RequestReviewManager {
    /*...*/
    func donate(to reason: RequestReviewReason) async {
       // Don't show the alert, if it's already shown within 7 days.
@@ -91,6 +89,24 @@ class RequestReviewManager {
       userDefaults.set(count + 1, forKey: reason.rawValue)
    }
 }
+
+extension UIApplication {
+    var foregroundActiveScene: UIWindowScene? {
+        connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+    }
+}
+
+extension Date {
+   func numberOfDays(from date: Date) -> Int {
+      let calendar = Calendar.current
+      let fromDate = calendar.startOfDay(for: self)
+      let toDate = calendar.startOfDay(for: date)
+      let numberOfDays = calendar.dateComponents([.day], from: fromDate, to: toDate)
+      
+      return abs(numberOfDays.day!)
+   }
+}
 ```
 Ignoring donations and not incrementing the counter if the 7-day period hasn't passed yet or this version has already been prompted for review.
 
@@ -100,7 +116,7 @@ Now, all we need to do is call the `donate()` method in the right places, and th
 
 ```swift
 struct FeedView: View {
-   @Environment(RequestReviewManager.self) var requestReviewManager
+   @Environment(\.requestReviewManager) var requestReviewManager
 
    var body: some View { /*...*/ }
    func addButtonTapped() async {
