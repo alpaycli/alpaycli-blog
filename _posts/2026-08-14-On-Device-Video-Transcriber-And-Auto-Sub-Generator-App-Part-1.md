@@ -3,7 +3,7 @@ layout: post
 title: "Building an On-Device Video Transcriber and auto subtitles generator with Swift/SwiftUI and SpeechAnalyzer — Part 1"
 date: 2026-08-14 12:00:00 -0000
 categories: []
-tags: []
+tags: [swift,swiftui, speech, speech-to-text]
 permalink: /blog/:year/:month/:day/:title
 ---
 
