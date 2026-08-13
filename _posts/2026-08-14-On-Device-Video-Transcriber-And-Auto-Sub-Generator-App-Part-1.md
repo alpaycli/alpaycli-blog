@@ -1,4 +1,11 @@
-# Building an On-Device Video Transcriber and auto subtitles generator on Swift with SpeechAnalyzer — Part 1
+---
+layout: post
+title: "Building an On-Device Video Transcriber and auto subtitles generator with Swift/SwiftUI and SpeechAnalyzer — Part 1"
+date: 2026-08-14 12:00:00 -0000
+categories: []
+tags: []
+permalink: /blog/:year/:month/:day/:title
+---
 
 Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video transcriber and automatic subtitle generator app that runs fully on-device, thanks to Apple’s SpeechAnalyzer API.
 
