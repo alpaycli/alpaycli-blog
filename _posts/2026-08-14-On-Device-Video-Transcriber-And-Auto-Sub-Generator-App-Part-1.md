@@ -361,7 +361,7 @@ Apple demonstrates the same general technique—comparing playback time with the
 ## Putting everything together
 
 <video class="post-result-video" controls playsinline preload="metadata">
-  <source src="{{ '/assets/images/video-editor-part-1-result.mov' | relative_url }}" type="video/quicktime">
+  <source src="{{ '/assets/images/video-editor-part-1-result.mp4' | relative_url }}" type="video/mp4">
   Your browser does not support embedded videos.
 </video>
 
