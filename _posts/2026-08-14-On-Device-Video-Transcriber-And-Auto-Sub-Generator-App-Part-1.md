@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Building an On-Device Video Transcriber and auto subtitles generator with Swift/SwiftUI and SpeechAnalyzer — Part 1"
+title: "Building an On-Device Video Editor app with Swift/SwiftUI and SpeechAnalyzer — Part 1"
 date: 2026-08-14 12:00:00 -0000
 categories: []
 tags: [swift,swiftui, speech, speech-to-text]
 permalink: /blog/:year/:month/:day/:title
 ---
 
-Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video transcriber and automatic subtitle generator app that runs fully on-device, thanks to Apple’s SpeechAnalyzer API.
+Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
 
 Actually, I built the final version of this app as my submission for the Swift Student Challenge this year, which didn’t turn out to be selected among the winners. Still, after some time passed, I thought it was a cool app where I tried and learned different technologies, and it would be nice to share my experiences and how I solved some technical barriers.
 
