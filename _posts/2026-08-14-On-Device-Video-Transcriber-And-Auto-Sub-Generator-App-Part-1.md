@@ -7,9 +7,23 @@ tags: [swift,swiftui, speech, speech-to-text]
 permalink: /blog/:year/:month/:day/:title
 ---
 
+<section class="post-video-intro">
+  <div class="post-video-intro__text" markdown="1">
 Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
 
 Actually, I built the final version of this app as my submission for the Swift Student Challenge this year, which didn’t turn out to be selected among the winners. Still, after some time passed, I thought it was a cool app where I tried and learned different technologies, and it would be nice to share my experiences and how I solved some technical barriers.
+  </div>
+
+  <figure class="post-video-intro__media">
+    <video controls playsinline preload="metadata">
+      <source src="{{ '/assets/images/video-editor-demo.mp4' | relative_url }}" type="video/mp4">
+      Your browser does not support embedded videos.
+    </video>
+    <figcaption>
+      A preview of the final app, including transcription, subtitles, and word censoring.
+    </figcaption>
+  </figure>
+</section>
 
 One of the most interesting parts was adding layers at specific positions and times in a video that we want to export. Unfortunately, that is not as straightforward as adding an `.overlay` modifier in SwiftUI.
 
@@ -18,7 +32,6 @@ We will get to that in the following parts of the series.
 In this first part, we will look at how to:
 
 - Import a video from Files or the Photo Library.
-- Extract its audio track.
 - Transcribe the audio fully on-device.
 - Display the video using SwiftUI’s native `VideoPlayer`.
 - Highlight the currently spoken word as the video plays or the user changes its playback position.
@@ -88,6 +101,8 @@ guard SpeechTranscriber.isAvailable else {
 If it is unavailable, you can disable this feature or fall back to [`DictationTranscriber`](https://developer.apple.com/documentation/speech/dictationtranscriber). In this article, however, we are going to use the new `SpeechTranscriber` API.
 
 You can find more details about device and locale support in Apple’s [`SpeechTranscriber` documentation](https://developer.apple.com/documentation/speech/speechtranscriber).
+
+This demo assumes that the on-device speech model for `en-US` is already installed. In a production app, you should also handle cases where the required model is unavailable.
 
 ## Configuring SpeechTranscriber
 
