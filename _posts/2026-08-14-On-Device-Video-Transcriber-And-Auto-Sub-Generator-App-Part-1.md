@@ -9,7 +9,7 @@ permalink: /blog/:year/:month/:day/:title
 
 <section class="post-video-intro">
   <div class="post-video-intro__text" markdown="1">
-Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
+Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will work fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
 
 Actually, I built the final version of this app as my submission for the Swift Student Challenge this year, which didn’t turn out to be selected among the winners. Still, after some time passed, I thought it was a cool app where I tried and learned different technologies, and it would be nice to share my experiences and how I solved some technical barriers.
   </div>
@@ -35,6 +35,8 @@ In this first part, we will look at how to:
 - Transcribe the audio fully on-device.
 - Display the video using SwiftUI’s native `VideoPlayer`.
 - Highlight the currently spoken word as the video plays or the user changes its playback position.
+
+I haven't included all the code in this post to keep the code snippets minimal. You can download the complete Xcode project for Part 1 <a href="{{ '/assets/downloads/video-editor-part-1.zip' | relative_url }}" download>here</a>.
 
 ## Creating the transcriber
 
@@ -357,6 +359,11 @@ The nice part is that we do not need to create a separate array containing every
 Apple demonstrates the same general technique—comparing playback time with the `audioTimeRange` attributes—in its [WWDC25 SpeechAnalyzer session](https://developer.apple.com/videos/play/wwdc2025/277/).
 
 ## Putting everything together
+
+<video class="post-result-video" controls playsinline preload="metadata">
+  <source src="{{ '/assets/images/video-editor-part-1-result.mov' | relative_url }}" type="video/quicktime">
+  Your browser does not support embedded videos.
+</video>
 
 The complete flow now looks like this:
 

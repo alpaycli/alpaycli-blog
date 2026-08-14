@@ -19,6 +19,7 @@
 *.rar
 *.tar
 *.zip
+!assets/downloads/*.zip
 
 # Logs and databases #
 ######################
@@ -58,4 +59,3 @@ Gemfile.lock
 .vscode/
 *.swp
 *.swo
-

@@ -509,6 +509,15 @@ header, section, footer {
   }
 }
 
+.post-result-video {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 2rem auto;
+  border-radius: 14px;
+}
+
 @media (max-width: 960px) {
   .wrapper {
     padding: 0 1.5rem !important;
