@@ -360,11 +360,9 @@ struct SubtitleShowMethodPicker: View {
   <div class="post-video-intro__text" markdown="1">
 We now have a nicely working subtitles appearing over the video in 3 different versions with seamless transitions while switching between them.
 
-In the next part, 
+<a href="{{ '/assets/downloads/video-editor-part-3.zip' | relative_url }}" download>Download</a> project after changes here in part 3.
 
 Thanks for reading, see you in the part 4!
-
-<a href="{{ '/assets/downloads/video-editor-part-3.zip' | relative_url }}" download>Download</a> project after changes here in part 3.
   </div>
 
   <figure class="post-video-intro__media">
