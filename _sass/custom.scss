@@ -335,6 +335,24 @@ header, section, footer {
         line-height: 1.5 !important;
         color: $text-color !important;
 
+        .code-line {
+          display: inline-block;
+          min-width: 100%;
+          margin: 0 -1rem;
+          padding: 0 1rem;
+          box-sizing: content-box;
+        }
+
+        .code-line--added {
+          background: rgba(46, 160, 67, 0.22);
+          box-shadow: inset 3px 0 0 #3fb950;
+        }
+
+        .code-line--removed {
+          background: rgba(248, 81, 73, 0.2);
+          box-shadow: inset 3px 0 0 #f85149;
+        }
+
         .token.comment,
         .token.prolog,
         .token.doctype,
@@ -509,6 +527,15 @@ header, section, footer {
   }
 }
 
+.post-video-intro--compact {
+  gap: 1.25rem;
+
+  .post-video-intro__media {
+    flex-basis: 220px;
+    width: 220px;
+  }
+}
+
 .post-result-video {
   display: block;
   width: 100%;
@@ -561,6 +588,13 @@ header, section, footer {
       align-self: center;
       flex-basis: auto;
       width: min(280px, 100%);
+    }
+  }
+
+  .post-video-intro--compact {
+    .post-video-intro__media {
+      flex-basis: auto;
+      width: min(240px, 100%);
     }
   }
 }
