@@ -9,7 +9,7 @@ permalink: /blog/:year/:month/:day/:title
 
 <section class="post-video-intro">
   <div class="post-video-intro__text" markdown="1">
-Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will work fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
+Hi everyone, this is going to be the first part of a few-part series where I’m going to share my experience of building kind of a video editor app where user can see the full transcription of the video, see auto-generated subtitles on it, and even select words to censor(add beep or duck sound). It will work fully on-device, thanks to Apple’s SpeechAnalyzer API for speech-to-text conversion.
 
 Actually, I built the final version of this app as my submission for the Swift Student Challenge this year, which didn’t turn out to be selected among the winners. Still, after some time passed, I thought it was a cool app where I tried and learned different technologies, and it would be nice to share my experiences and how I solved some technical barriers.
   </div>
@@ -25,9 +25,9 @@ Actually, I built the final version of this app as my submission for the Swift S
   </figure>
 </section>
 
-One of the most interesting parts was adding layers at specific positions and times in a video that we want to export. Unfortunately, that is not as straightforward as adding an `.overlay` modifier in SwiftUI.
+There are several interesting parts we will take a look at, such as muting selected words with high precision to not cause any odd behaviour or adding layers at specific positions in an export video which is unfortunately, is not as straightforward as adding an `.overlay` modifier in SwiftUI.
 
-We will get to that in the following parts of the series.
+We will get to those in the following parts of the series.
 
 In this first part, we will look at how to:
 
@@ -92,7 +92,7 @@ Let’s go through some of the code here.
 
 We check the availability of `SpeechTranscriber` for the user’s device by putting a guard statement with `SpeechTranscriber.isAvailable` at the very beginning.
 
-According to Apple, this property tells us whether the transcriber module is available based on the device’s hardware and capabilities.
+This property tells us whether the transcriber module is available based on the device’s hardware and capabilities.
 
 ```swift
 guard SpeechTranscriber.isAvailable else {
@@ -101,8 +101,6 @@ guard SpeechTranscriber.isAvailable else {
 ```
 
 If it is unavailable, you can disable this feature or fall back to [`DictationTranscriber`](https://developer.apple.com/documentation/speech/dictationtranscriber). In this article, however, we are going to use the new `SpeechTranscriber` API.
-
-You can find more details about device and locale support in Apple’s [`SpeechTranscriber` documentation](https://developer.apple.com/documentation/speech/speechtranscriber).
 
 This demo assumes that the on-device speech model for `en-US` is already installed. In a production app, you should also handle cases where the required model is unavailable.
 
@@ -131,7 +129,7 @@ With `.audioTimeRange`, the returned `AttributedString` contains an `audioTimeRa
 
 This is also why we return an `AttributedString` instead of converting the result into a regular `String`. A regular `String` would preserve the characters, but it would lose the Speech framework’s timing attributes.
 
-## Analyzing the audio file
+## Analyzing the file
 
 `SpeechAnalyzer` manages the analysis session, while `SpeechTranscriber` is the module that performs speech-to-text processing.
 
@@ -170,24 +168,236 @@ for try await result in transcriber.results where result.isFinal {
 
 For a prerecorded video, we only need finalized results. Volatile results are more useful for live transcription, where you want to display SpeechTranscriber’s latest guess while the person is still speaking.
 
-## Importing videos
-
+## View setup
 For this demo, the user can select a video from either Files or the Photo Library.
 
-SwiftUI gives us native modifiers for both sources:
+```swift
+import AVKit
+import PhotosUI
+import SwiftUI
+import UniformTypeIdentifiers
+
+struct TranscriptDemoView: View {
+    @State private var model = TranscriptDemoViewModel()
+    @State private var isFileImporterPresented = false
+    @State private var isPhotoPickerPresented = false
+    @State private var photoPickerItem: PhotosPickerItem?
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                if let player = model.player {
+                    VideoPlayer(player: player)
+                        .aspectRatio(16 / 9, contentMode: .fit)
+                        .clipShape(.rect(cornerRadius: 12))
+
+                    TranscriptContainerView(
+                        transcript: model.transcript,
+                        playbackTime: model.playbackTime
+                    )
+                } else {
+                    contentUnavailableView
+                }
+            }
+            .padding()
+        }
+        .safeAreaInset(edge: .bottom) {
+            if model.player != nil {
+                videoImporterView
+            }
+        }
+        .fileImporter(
+            isPresented: $isFileImporterPresented,
+            allowedContentTypes: [.movie],
+            allowsMultipleSelection: false,
+            onCompletion: handleFileImport
+        )
+        .photosPicker(
+            isPresented: $isPhotoPickerPresented,
+            selection: $photoPickerItem,
+            matching: .videos
+        )
+        .onChange(of: photoPickerItem, handlePhotoSelection)
+        .onDisappear(perform: model.stopPlayback)
+    }
+
+    private func handleFileImport(_ result: Result<[URL], any Error>) {
+        switch result {
+        case .success(let urls):
+            guard let url = urls.first else { return }
+            Task {
+                await model.importVideo(from: url)
+            }
+        case .failure(let error):
+            model.reportFileImportFailure(error)
+        }
+    }
+
+    private func handlePhotoSelection(_ oldItem: PhotosPickerItem?, _ newItem: PhotosPickerItem?) {
+        guard let newItem else { return }
+
+        Task {
+            await model.importVideo(from: newItem)
+            photoPickerItem = nil
+        }
+    }
+}
+
+extension TranscriptDemoView {
+    private var contentUnavailableView: some View {
+        ContentUnavailableView {
+            Label("Import a Video", systemImage: "video.badge.plus")
+        } description: {
+            Text("Choose a video from Files or your Photo Library to create a word-timed transcript.")
+        } actions: {
+            VideoImportMenu(
+                isFileImporterPresented: $isFileImporterPresented,
+                isPhotoPickerPresented: $isPhotoPickerPresented,
+                isDisabled: model.isProcessing
+            )
+        }
+        .containerRelativeFrame(.vertical) { height, _ in
+            height * 0.65
+        }
+    }
+    
+    private var videoImporterView: some View {
+        VideoImportMenu(
+            isFileImporterPresented: $isFileImporterPresented,
+            isPhotoPickerPresented: $isPhotoPickerPresented,
+            isDisabled: model.isProcessing
+        )
+        .padding()
+    }
+}
+```
+
+## ViewModel setup
 
 ```swift
-.fileImporter(
-    isPresented: $isFileImporterPresented,
-    allowedContentTypes: [.movie],
-    allowsMultipleSelection: false,
-    onCompletion: handleFileImport
-)
-.photosPicker(
-    isPresented: $isPhotoPickerPresented,
-    selection: $photoPickerItem,
-    matching: .videos
-)
+import AVFoundation
+import Observation
+import PhotosUI
+import SwiftUI
+
+/// Coordinates importing, audio extraction, transcription, and video playback.
+///
+/// The view owns this model, while the model exposes only UI-facing state. Media
+/// processing details stay in the focused helper types below it.
+@MainActor
+@Observable
+final class TranscriptDemoViewModel {
+    private(set) var player: AVPlayer?
+    /// Speech's attributed result, including an `audioTimeRange` on each word.
+    private(set) var transcript: AttributedString?
+    private(set) var playbackTime: TimeInterval = 0
+    private(set) var state = TranscriptState.empty
+
+    @ObservationIgnored private let audioExtractor = VideoAudioExtractor()
+    @ObservationIgnored private let transcriber: Transcribable = Transcriber()
+    @ObservationIgnored private let videoStore = ImportedVideoStore()
+    @ObservationIgnored private var timeObserver: Any?
+
+    init() {
+        AVPlayer.isObservationEnabled = true
+    }
+
+    var isProcessing: Bool {
+        state.isProcessing
+    }
+
+    func importVideo(from fileURL: URL) async {
+        state = .importing
+
+        // File importer URLs require explicit access. Copy the video while access
+        // is active, then release the external file immediately afterward.
+        guard fileURL.startAccessingSecurityScopedResource() else {
+            state = .failed("The selected file could not be accessed.")
+            return
+        }
+
+        defer {
+            fileURL.stopAccessingSecurityScopedResource()
+        }
+
+        do {
+            let localURL = try await videoStore.copyVideo(from: fileURL)
+            try await processVideo(at: localURL)
+        } catch {
+            state = .failed(error.localizedDescription)
+        }
+    }
+
+    func importVideo(from item: PhotosPickerItem) async {
+        state = .importing
+
+        do {
+            guard let video = try await item.loadTransferable(type: TransferableVideo.self) else {
+                throw TranscriptError.photoImportFailed
+            }
+
+            try await processVideo(at: video.url)
+        } catch {
+            state = .failed(error.localizedDescription)
+        }
+    }
+
+    func reportFileImportFailure(_ error: any Error) {
+        state = .failed(error.localizedDescription)
+    }
+
+    func stopPlayback() {
+        player?.pause()
+    }
+
+    private func processVideo(at videoURL: URL) async throws {
+        // Playback can be prepared immediately; transcription does not need to
+        // finish before the user can inspect the selected video.
+        preparePlayer(for: videoURL)
+        transcript = nil
+        playbackTime = 0
+        state = .extractingAudio
+
+        // somehow, i remember that feeding video url to transcriber used to cause
+        // some issue/throw error, but now it seems fine, so keeping both.
+        // let audioURL = try await audioExtractor.extractAudio(from: videoURL)
+        let audioURL = videoURL
+        defer {
+            // The extracted track is an intermediate input, not user data.
+            try? FileManager.default.removeItem(at: audioURL)
+        }
+
+        state = .transcribing
+        transcript = try await transcriber.transcribe(audioAt: audioURL)
+        state = .ready
+    }
+
+    private func preparePlayer(for videoURL: URL) {
+        // An observer belongs to the player that created it, so remove the old
+        // token before replacing the player with one for a newly imported video.
+        removeTimeObserver()
+        player?.pause()
+
+        let player = AVPlayer(url: videoURL)
+        self.player = player
+
+        // VideoPlayer owns play, pause, and seeking controls. This observer
+        // mirrors its clock into observable state so the transcript follows them.
+        let interval = CMTime(seconds: 0.05, preferredTimescale: 600)
+        timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            Task { @MainActor [weak self] in
+                self?.playbackTime = time.seconds
+            }
+        }
+    }
+
+    private func removeTimeObserver() {
+        guard let player, let timeObserver else { return }
+        player.removeTimeObserver(timeObserver)
+        self.timeObserver = nil
+    }
+}
+
 ```
 
 There is one thing we should keep in mind here: the URLs received from these importers may not remain available forever.
@@ -209,26 +419,37 @@ let localURL = try await videoStore.copyVideo(from: fileURL)
 
 The file delivered by `PhotosPicker` is also temporary. Our `TransferableVideo` implementation copies it before the transfer closure returns.
 
+```swift
+import CoreTransferable
+import Foundation
+import UniformTypeIdentifiers
+
+/// A durable local copy of a video selected through `PhotosPicker`.
+///
+/// The URL supplied to a transfer closure is temporary. Copying the file before
+/// the closure returns ensures AVPlayer and the audio extractor can use it later.
+struct TransferableVideo: Transferable {
+    let url: URL
+
+    nonisolated static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(importedContentType: .movie) { receivedVideo in
+            let sourceURL = receivedVideo.file
+            let destinationURL = FileManager.default.temporaryDirectory
+                .appending(path: UUID().uuidString)
+                .appendingPathExtension(sourceURL.pathExtension)
+
+            try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
+            return TransferableVideo(url: destinationURL)
+        }
+    }
+}
+```
+
 By doing this, `AVPlayer` and the transcriber both receive a local URL that remains valid while the demo is running.
-
-## Displaying the video
-
-Displaying is pretty straightforward, we just create an `AVPlayer` object and pass it to SwiftUI’s native `VideoPlayer`.
-
-```swift
-let player = AVPlayer(url: videoURL)
-self.player = player
-```
-
-```swift
-VideoPlayer(player: player)
-    .aspectRatio(16 / 9, contentMode: .fit)
-    .clipShape(.rect(cornerRadius: 12))
-```
 
 Using `VideoPlayer` means we do not need to build our own play, pause, scrubbing, or fullscreen controls.
 
-However, the transcript still needs to know the current playback time. For that, we add an observer to the player.
+However, the transcript still needs to know the current playback time. For that, we added an observer to the player.
 
 ```swift
 let interval = CMTime(
