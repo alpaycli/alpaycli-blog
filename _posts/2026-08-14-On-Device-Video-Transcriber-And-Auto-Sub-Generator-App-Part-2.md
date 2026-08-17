@@ -1,5 +1,6 @@
 ---
 layout: post
+published: false
 title: "Building an On-Device Video Editor app with Swift/SwiftUI and SpeechAnalyzer — Part 2"
 date: 2026-08-14 13:00:00 -0000
 categories: []
