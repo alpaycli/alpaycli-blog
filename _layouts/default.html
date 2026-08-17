@@ -26,7 +26,6 @@
               </h3>
               <div class="post-meta">
                 <span class="post-date">{{ post.date | date: "%d %b %Y" }}</span>
-                <span class="read-time">{{ post.content | number_of_words | divided_by: 200 | plus: 1 }} min read</span>
               </div>
               {% if post.description %}
               <p>{{ post.description }}</p>

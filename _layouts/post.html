@@ -8,7 +8,6 @@ layout: default
       <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">
         {{ page.date | date: "%d %b %Y" }}
       </time>
-      <span class="read-time">{{ content | number_of_words | divided_by: 200 | plus: 1 }} min read</span>
     </div>
 
     {% if page.categories.size > 0 or page.tags.size > 0 %}
@@ -46,4 +45,4 @@ layout: default
     <a class="next" href="{{ page.next.url | relative_url }}">{{ page.next.title }} &raquo;</a>
     {% endif %}
   </div>
-</article> 
+</article>

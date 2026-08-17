@@ -5,7 +5,6 @@ $link-hover-color: #90caf9;
 $border-color: #404040;
 $header-background: #252525;
 $date-color: #888;
-$read-time-color: #666;
 $code-background: #383838;
 $blockquote-border: #4a4a4a;
 
@@ -146,14 +145,6 @@ header, section, footer {
     margin-right: 1rem;
   }
 
-  .read-time {
-    color: $read-time-color;
-    &::before {
-      content: "•";
-      margin: 0 0.5rem;
-    }
-  }
-  
   p {
     margin: 0.5rem 0 0;
     color: $text-color;
@@ -210,13 +201,6 @@ header, section, footer {
 
   .post-date {
     margin: 0 !important;
-  }
-
-  .read-time {
-    &::before {
-      content: "•";
-      margin-right: 1rem;
-    }
   }
 
   .post-metadata {
@@ -626,9 +610,6 @@ header, section, footer {
       gap: 0.5rem !important;
     }
 
-    .read-time::before {
-      display: none !important;
-    }
   }
 }
 
