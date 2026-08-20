@@ -131,6 +131,7 @@ struct DynamicTranscriptTextView: View {
                         .foregroundStyle(isHighlighted ? .primary : .secondary)
                         .underline(isHighlighted)
                 }
+                .buttonStyle(TranscriptWordButtonStyle())
                 .disabled(word.audioTimeRange == nil)
             }
         }
