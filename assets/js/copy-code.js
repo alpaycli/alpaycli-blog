@@ -13,9 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // A trailing `// +` or `// -` marker highlights an added or removed line.
-    // The marker is removed from both the rendered snippet and copied code.
+    // The marker is removed from the rendered snippet, and annotated blocks do
+    // not receive a copy button because they are not complete, copyable code.
     const lines = codeElement.innerHTML.split('\n');
-    if (lines.some(line => /\/\/\s*[+-]\s*$/.test(line.replace(/<[^>]*>/g, '')))) {
+    const hasChangeMarkers = lines.some(
+      line => /\/\/\s*[+-]\s*$/.test(line.replace(/<[^>]*>/g, ''))
+    );
+
+    if (hasChangeMarkers) {
       codeElement.innerHTML = lines.map(line => {
         const lineElement = document.createElement('span');
         lineElement.className = 'code-line';
@@ -39,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return lineElement.outerHTML;
       }).join('\n');
+
+      return;
     }
 
     const button = document.createElement('button');
