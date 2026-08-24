@@ -2,7 +2,7 @@
 layout: post
 published: true
 title: "Building an On-Device Video Editor app with Swift/SwiftUI and SpeechAnalyzer — Part 3"
-date: 2026-08-15 13:00:00 -0000
+date: 2026-08-24 13:00:00 -0000
 categories: []
 tags: [swift, swiftui, speech, speech-to-text, avfoundation]
 permalink: /blog/:year/:month/:day/:title
