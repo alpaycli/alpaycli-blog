@@ -8,13 +8,17 @@ tags: [swift, swiftui, speech, speech-to-text, avfoundation]
 permalink: /blog/:year/:month/:day/:title
 ---
 
-Here we are in the 3rd part!
+Here we are with Part 3!
+
 If you are new here, head back to [Part 1]({% post_url 2026-08-14-On-Device-Video-Transcriber-And-Auto-Sub-Generator-App-Part-1 %}) and [Part 2]({% post_url 2026-08-14-On-Device-Video-Transcriber-And-Auto-Sub-Generator-App-Part-2 %}) to see the progress so far. In this part, we will look at how to split the full transcript into subtitle groups and show them on top of the video player.
-We will show subtitles in 3 ways, which you can actually configure thees methods for your interest:
-- One word only(per frame)
-- Couple of words
-- Couple of words with highlighting the current spoken one.[]({% post_url 2026-08-14-On-Device-Video-Transcriber-And-Auto-Sub-Generator-App-Part-1 %})
-Let's define this as an enum
+
+We will show subtitles in three ways, and the user can choose the one that suits them:
+
+- One word at a time
+- A group of words
+- A group of words with the currently spoken word highlighted
+
+Let's define these methods as an enum.
 
 ```swift
 import SwiftUI
@@ -29,11 +33,11 @@ enum SubtitleShowMethod: String, CaseIterable, Identifiable {
     var description: LocalizedStringResource {
         switch self {
         case .oneWord:
-            "One Word"
+            "Word"
         case .wholeSentence:
-            "Whole Sentence"
+            "Group"
         case .wholeSentenceWithHighlightedWord:
-            "Whole Sentence with Word Highlighting"
+            "Highlight"
         }
     }
 }
@@ -57,7 +61,7 @@ struct SubtitleGrouper {
             let separatorCount = currentWords.isEmpty ? 0 : 1
             let proposedCount = currentCharacterCount + separatorCount + word.word.characters.count
 
-            if currentWords.isEmpty || proposedCount < maximumCharacterCount {
+            if currentWords.isEmpty || proposedCount <= maximumCharacterCount {
                 currentWords.append(word)
                 currentCharacterCount = proposedCount
             } else {
@@ -268,75 +272,79 @@ This is our view for displaying the subtitle depending on the selected style of 
 ## ViewModel setup
 Now we have implemented all the pieces, it's time to put them in places.
 Here are the new properties we want to introduce in our ViewModel
-```swift
-final class TranscriptDemoViewModel {
-    /* ... */
-    
-    private(set) var subtitleGroups: [SubtitleGroup] = [] // +
-    /// User's selected style to show subtitles. // +
-    var subtitleShowMethod: SubtitleShowMethod = .wholeSentenceWithHighlightedWord // +
-    
-    var currentSubtitleGroup: SubtitleGroup? { // +
-        subtitleGroups.first { group in // +
-            group.startTime.seconds <= playbackTime && playbackTime < group.endTime.seconds // +
-        } // +
-    } // +
+```diff
+ final class TranscriptDemoViewModel {
+     /* ... */
++
++    private(set) var subtitleGroups: [SubtitleGroup] = []
++    /// User's selected style to show subtitles.
++    var subtitleShowMethod: SubtitleShowMethod = .wholeSentenceWithHighlightedWord
++
++    var currentSubtitleGroup: SubtitleGroup? {
++        subtitleGroups.first { group in
++            group.startTime.seconds <= playbackTime && playbackTime < group.endTime.seconds
++        }
++    }
++
++    var currentSubtitleWord: TranscriptWord? {
++        currentSubtitleGroup?.words.first { word in
++            guard let timeRange = word.audioTimeRange else { return false }
++            return timeRange.start.seconds <= playbackTime && playbackTime < timeRange.end.seconds
++        }
++    }
 
-    var currentSubtitleWord: TranscriptWord? { // +
-        currentSubtitleGroup?.words.first { word in // +
-            guard let timeRange = word.audioTimeRange else { return false } // +
-            return timeRange.start.seconds <= playbackTime && playbackTime < timeRange.end.seconds // +
-        } // +
-    } // +
-    
-    /* ... */
-}
+     /* ... */
+ }
 ```
 And update `processVideo(at:) method`
-```swift
-    private func processVideo(at videoURL: URL) async throws {
-        // Playback can be prepared immediately; transcription does not need to
-        // finish before the user can inspect the selected video.
-        preparePlayer(for: videoURL)
-        transcript = nil
-        transcriptWords = []
-        subtitleGroups = [] // +
-        playbackTime = 0
-        state = .extractingAudio
+```diff
+     private func processVideo(at videoURL: URL) async throws {
+         // Playback can be prepared immediately; transcription does not need to
+         // finish before the user can inspect the selected video.
+         preparePlayer(for: videoURL)
+         transcript = nil
+         transcriptWords = []
++        subtitleGroups = []
+         playbackTime = 0
+         state = .extractingAudio
 
-        let audioURL = try await audioExtractor.extractAudio(from: videoURL)
-        defer {
-            // The extracted track is an intermediate input, not user data.
-            try? FileManager.default.removeItem(at: audioURL)
-        }
+         let audioURL = try await audioExtractor.extractAudio(from: videoURL)
+         defer {
+             // The extracted track is an intermediate input, not user data.
+             try? FileManager.default.removeItem(at: audioURL)
+         }
 
-        state = .transcribing
-        let transcript = try await transcriber.transcribe(audioAt: audioURL)
-        self.transcript = transcript
-        transcriptWords = transcript.transcriptWords()
-        subtitleGroups = subtitleGrouper.apply(to: transcriptWords) // +
-        state = .ready
-    }
+         state = .transcribing
+         let transcript = try await transcriber.transcribe(audioAt: audioURL)
+         self.transcript = transcript
+         transcriptWords = transcript.transcriptWords()
++        subtitleGroups = subtitleGrouper.apply(to: transcriptWords)
+         state = .ready
+     }
 ```
 
 ## View setup
-```swift
-VStack(spacing: 24) {
-    if let player = model.player {
-        VideoPlayer(player: player) // -
-        VideoPlayer(player: player) { // +
-            SubtitleOverlayView( // +
-                group: model.currentSubtitleGroup, // +
-                currentWord: model.currentSubtitleWord, // +
-                showMethod: model.subtitleShowMethod // +
-            ) // +
-        } // +
-        .aspectRatio(16 / 9, contentMode: .fit)
-        .clipShape(.rect(cornerRadius: 12))
+```diff
+ VStack(spacing: 24) {
+     if let player = model.player {
+-        VideoPlayer(player: player)
++        VideoPlayer(player: player) {
++            SubtitleOverlayView(
++                group: model.currentSubtitleGroup,
++                currentWord: model.currentSubtitleWord,
++                showMethod: model.subtitleShowMethod
++            )
++        }
+         .aspectRatio(16 / 9, contentMode: .fit)
+         .clipShape(.rect(cornerRadius: 12))
+     }
 
-    SubtitleShowMethodPicker(selection: $model.subtitleShowMethod) // +
-    // +
-    TranscriptContainerView(
++    SubtitleShowMethodPicker(selection: $model.subtitleShowMethod)
++
+     TranscriptContainerView(
+         /* ... */
+     )
+ }
 ```
 ```swift
 import SwiftUI
