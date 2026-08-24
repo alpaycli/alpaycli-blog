@@ -61,7 +61,7 @@ struct SubtitleGrouper {
             let separatorCount = currentWords.isEmpty ? 0 : 1
             let proposedCount = currentCharacterCount + separatorCount + word.word.characters.count
 
-            if currentWords.isEmpty || proposedCount <= maximumCharacterCount {
+            if currentWords.isEmpty || proposedCount < maximumCharacterCount {
                 currentWords.append(word)
                 currentCharacterCount = proposedCount
             } else {
@@ -111,7 +111,7 @@ struct SubtitleGroup: Identifiable {
 }
 ```
 
-To make things simple, only rule I set to separate subtitles is `maximumCharacterCount`, but it's possible to go more complex and detailed about how you want to build up it.
+To keep things simple, the only rule I use to separate subtitles is an exclusive character-count limit. With `maximumCharacterCount` set to 40, each group stays below 40 characters. You can extend this with more detailed grouping rules if needed.
 Storing both `text` and `words` properties helps us to have more control over each word like we did the same for the transcript model.
 
 Well. since we are going to show each word as a separate UI element, again, we need to define a custom `Layout` for the subtitles.
@@ -219,7 +219,7 @@ struct SubtitleLayout: Layout {
 }
 ```
 
-Well, AI did almost the whole job for this mathematical calculations, I don't really understand the everything that's going on, so I'm just gonna get past on this part:))
+Well, I didn't write all these mathematical calculations by hand, AI did almost the whole job, but basically what's happening here is that the layout measures each word, moves it to a new row when it no longer fits within the available width, and then centers each row.
 
 ## SubtitleOverlayView
 
