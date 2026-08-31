@@ -130,7 +130,7 @@ final class OurViewModel {
 
 Well, back to Bill. After we run this insight evalution, it told us there is a high-scam risk. So in our banking app example, we can pause the operation, show an alert to Bill to wait for a few minutes due to a possibly suspicious operation, and notify the call-service members to get in contact with Bill to make sure it's all intentional and confirm the operation.
 
-Note: Sandbox environment is used during development. Production models/servers are used after App Store distribution.
+Note: Sandbox environment is used for Trust Insight during development. Production models/servers are used after App Store distribution.
 
 ## Conclusion
 
