@@ -254,6 +254,46 @@ header, section, footer {
       margin: 1.5rem 0 !important;
     }
 
+    p.post-callout {
+      --callout-accent: #{$link-color};
+      --callout-background: rgba(100, 181, 246, 0.08);
+      --callout-border: rgba(100, 181, 246, 0.22);
+
+      position: relative;
+      margin: 2rem 0 !important;
+      padding: 1.15rem 1.35rem 1.2rem 1.5rem !important;
+      overflow: hidden;
+      border: 1px solid var(--callout-border);
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--callout-background), rgba(37, 37, 37, 0.72));
+      color: $text-color;
+      box-shadow: inset 4px 0 0 var(--callout-accent);
+
+      &::before {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--callout-accent);
+        content: attr(data-callout-label);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        line-height: 1.4;
+        text-transform: uppercase;
+      }
+
+      &--warning {
+        --callout-accent: #f0b45a;
+        --callout-background: rgba(240, 180, 90, 0.08);
+        --callout-border: rgba(240, 180, 90, 0.24);
+      }
+
+      &--disclaimer {
+        --callout-accent: #b7a9e8;
+        --callout-background: rgba(183, 169, 232, 0.08);
+        --callout-border: rgba(183, 169, 232, 0.22);
+      }
+    }
+
     hr {
       border: none !important;
       height: 1px !important;
