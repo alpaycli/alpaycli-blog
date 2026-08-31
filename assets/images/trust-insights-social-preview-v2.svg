@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+  <rect width="1536" height="1024" fill="#F3F0E8"/>
+
+  <g fill="#091B32" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="104" y="120" font-size="28" font-weight="600" letter-spacing="4">iOS 27  /  TRUST &amp; SAFETY</text>
+
+    <text x="96" y="422" font-size="190" font-weight="800" letter-spacing="-8">TRUST</text>
+    <text x="96" y="626" font-size="190" font-weight="800" letter-spacing="-8">INSIGHTS</text>
+
+    <text x="105" y="858" font-size="38" font-weight="500" letter-spacing="-0.5">Detect scam coaching in iOS apps</text>
+  </g>
+
+  <g transform="translate(1035 790)">
+    <line x1="0" y1="0" x2="155" y2="0" stroke="#2F6FB4" stroke-width="10"/>
+    <rect x="182" y="-38" width="20" height="76" rx="3" fill="#F06449"/>
+    <line x1="229" y1="0" x2="384" y2="0" stroke="#2F6FB4" stroke-width="10"/>
+  </g>
+
+  <rect x="96" y="927" width="1344" height="3" fill="#091B32" opacity="0.14"/>
+</svg>
